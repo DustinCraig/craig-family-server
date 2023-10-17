@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import twilio from "twilio";
+import schedule from "node-schedule";
 import { parseWeather, weatherToText } from "./lib/parse-weather.js";
 
 const app = express();
@@ -16,6 +17,24 @@ const twilioClient = twilio(twilioSID, twilioAuth);
 
 app.get("/healthcheck", async (req, res) => {
   res.send("OK");
+});
+
+app.get("/weather", async (req, res) => {
+  try {
+    res.send(weather);
+  } catch (err) {
+    res.status(500).send({
+      err: "An error occurred while attempting to retrieve weather",
+      success: false,
+    });
+  }
+});
+
+app.listen(port, () => {
+  console.info(`App started on port: ${port}`);
+});
+
+const job = schedule.scheduleJob("0 0 * * *", async () => {
   const weatherResponse = await fetch(
     `http://api.openweathermap.org/data/3.0/onecall?lat=${35.9606}&lon=${-83.926453}&appid=${weatherApi}&exclude=minutely,hourly&units=imperial`
   );
@@ -35,19 +54,4 @@ app.get("/healthcheck", async (req, res) => {
         console.log("err ", err);
       });
   });
-});
-
-app.get("/weather", async (req, res) => {
-  try {
-    res.send(weather);
-  } catch (err) {
-    res.status(500).send({
-      err: "An error occurred while attempting to retrieve weather",
-      success: false,
-    });
-  }
-});
-
-app.listen(port, () => {
-  console.info(`App started on port: ${port}`);
 });
