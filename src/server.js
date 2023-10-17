@@ -5,7 +5,7 @@ import twilio from "twilio";
 import { parseWeather, weatherToText } from "./lib/parse-weather.js";
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 const weatherApi = process.env.WEATHER_API;
 const twilioAuth = process.env.TWILIO_AUTH;
