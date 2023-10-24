@@ -33,6 +33,5 @@ export function weatherToText(parsedWeather) {
   result += `The current weather is ${current.weather} and the temperature is: ${current.temp}`;
   result += "\n";
   result += `Tomorrow, the weather will be ${tomorrow.weather} and the temperature will be: ${tomorrow.temp}`;
-  result += "\nHave a great day!";
   return result;
 }
